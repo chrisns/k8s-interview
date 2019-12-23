@@ -1,0 +1,39 @@
+name: Docker Image CI
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+
+      - name: Build
+        run: docker build -t chrisns/docker-devtest:latest .
+
+      - name: Test
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: |
+          gpg --import  <(echo "${PRIVATE_KEY}")
+          apt-get update && apt-get install git-secret
+          git secret reveal
+          ./cheat.sh
+
+      - name: Docker login
+        env:
+          docker_username: ${{ secrets.docker_username }}
+          docker_password: ${{ secrets.docker_password }}
+        run: docker login  -u $docker_username -p ${docker_password}
+
+      - name: Tag
+        run: docker tag chrisns/docker-devtest:latest chrisns/docker-devtest:${GITHUB_SHA}
+
+      - name: Push latest
+        if: github.ref == 'refs/heads/master'
+        run: docker push chrisns/docker-devtest:latest
+
+      - name: Push sha
+        run: docker push chrisns/docker-devtest:${GITHUB_SHA}
