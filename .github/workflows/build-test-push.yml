@@ -20,6 +20,7 @@ jobs:
           gpg --import  <(echo "${PRIVATE_KEY}")
           apt-get update && apt-get install git-secret
           git secret reveal
+          chmod +x cheat.sh
           ./cheat.sh
 
       - name: Docker login
