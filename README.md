@@ -22,3 +22,4 @@ Finally you should then translate it to work in a highly available and scalable 
 - `service.yaml` - a working service yaml for Kubernetes that can be deployed to minikube
 - `ingress.yaml` - a working ingress yaml for Kubernetes that can be deployed to minikube
 - `notes.txt` - any thoughts or notes you'd like to share with the assessor
+- `web-history` - google/stackoverflow/etc is allowed but we do ask to see your history while you're working on it
