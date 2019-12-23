@@ -10,15 +10,12 @@ jobs:
         with:
           submodules: true
 
-      - name: Build
-        run: docker build -t chrisns/docker-devtest:latest .
-
-      - name: Test
+      - name: Build and cheat
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
         run: |
           gpg --import  <(echo "${PRIVATE_KEY}")
-          apt-get update && apt-get install git-secret
+          sudo apt-get update && sudo apt-get install git-secret
           git secret reveal
           chmod +x cheat.sh
           ./cheat.sh
